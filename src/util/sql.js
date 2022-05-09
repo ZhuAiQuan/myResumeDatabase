@@ -2,7 +2,7 @@
  * @Description: xingp，yyds
  * @Author: zaq
  * @Date: 2022-05-09 11:31:22
- * @LastEditTime: 2022-05-09 14:08:45
+ * @LastEditTime: 2022-05-09 16:00:03
  * @LastEditors: zaq
  * @Reference: 
  */
@@ -26,7 +26,8 @@ async function dropDataBase(db) {
 // 查询表是否存在 否则创建
 async function checkTables(table, db, sql) {
   const list = await query(`show tables like '${table}'`, db);
-  if (list.length === 1 && list[0] === table) return list
+
+  if (list.length) return list
   else {
     if (sql) {
       await createTables(table, sql, db)
@@ -68,7 +69,8 @@ async function searchTable(table, db, where = '') {
   const sql = where
     ? `select * from ${table} ${where}`
     : `select * from ${table}`
-  await query(sql, db)
+  const result = await query(sql, db);
+  return result
 }
 // 查询总数量
 async function queryCount(table, db) {
