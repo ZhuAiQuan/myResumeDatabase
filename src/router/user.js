@@ -2,7 +2,7 @@
  * @Description: xingp，yyds
  * @Author: zaq
  * @Date: 2022-05-09 10:04:37
- * @LastEditTime: 2022-05-10 10:37:33
+ * @LastEditTime: 2022-05-10 11:39:46
  * @LastEditors: zaq
  * @Reference: 
  */
@@ -53,9 +53,10 @@ user.post('/login', async ctx => {
 })
 
 user.post('/register', async ctx => {
+
   const { name, password, code, avatar } = ctx.request.body;
   const { 'img-verify-code-state': time } = ctx.request.headers;
-
+  
   if (!name || !password || !code || !time) {
     ctx.body = {
       message: '缺少必要的参数!'
@@ -73,7 +74,8 @@ user.post('/register', async ctx => {
     await clearTable(verify, database, `verify='${code}'`)
   }
   // 查询注册用户是否已经注册过了
-  const user = searchTable(userInfo, database, `where name='${name}'`);
+  const user = await searchTable(userInfo, database, `where name='${name}'`);
+
   if (user.length) {
     ctx.body = {
       message: `用户'${user[0].name}'已经注册过了哦，请直接登录!`

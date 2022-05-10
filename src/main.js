@@ -2,7 +2,7 @@
  * @Description: xingp，yyds
  * @Author: zaq
  * @Date: 2022-05-09 09:56:54
- * @LastEditTime: 2022-05-10 11:08:25
+ * @LastEditTime: 2022-05-10 11:34:54
  * @LastEditors: zaq
  * @Reference:
  */
@@ -20,20 +20,20 @@ const checkToken = require("./middleware/checkToken");
 init();
 
 const app = new Koa();
+app.use(
+  koaBody({
+    multipart: true,
+    formidable: {
+      maxFileSize: 200 * 1024 * 1024,
+    },
+  })
+);
 app
   .use(cors())
   .use(bodyParser())
   .use(static(path.join(__dirname, "public")))
   .use(checkVerify)
   .use(checkToken)
-  .use(
-    koaBody({
-      multipart: true,
-      formidable: {
-        maxFileSize: 200 * 1024 * 1024,
-      },
-    })
-  )
   .use(router.routes(), router.allowedMethods());
 
 module.exports = (port) => {
